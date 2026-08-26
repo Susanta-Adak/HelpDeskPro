@@ -14,10 +14,16 @@ __pycache__/
 *.db
 *.sqlite3
 
+# Uploaded ticket attachments
+backend/uploads/
+
 # Node / frontend
 node_modules/
 dist/
 build/
+
+# Stitch design reference exports (local design assets, not app code)
+frontend/design-reference/
 
 # OS / editor
 .DS_Store
