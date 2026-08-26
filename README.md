@@ -1,4 +1,4 @@
-# Deskly — Mini Helpdesk / Ticket Management System
+# HelpDeskPro — Mini Helpdesk / Ticket Management System
 
 A small role-based helpdesk app with two user types:
 
@@ -11,7 +11,7 @@ Built as a technical interview / portfolio project. See [`CLAUDE.md`](./CLAUDE.m
 
 | Layer    | Technology                     |
 |----------|---------------------------------|
-| Frontend | React.js *(in progress)*        |
+| Frontend | React.js (Vite, React Router, Tailwind CSS v4) |
 | Backend  | FastAPI (Python)                |
 | Database | SQLite                          |
 | Auth     | JWT (username/password login)   |
@@ -20,7 +20,7 @@ Built as a technical interview / portfolio project. See [`CLAUDE.md`](./CLAUDE.m
 ## Status
 
 - ✅ **Backend** — implemented, tested (24 passing pytest cases), manually smoke-tested end-to-end
-- 🚧 **Frontend** — not yet started
+- ✅ **Frontend** — implemented (support + admin flows), manually smoke-tested end-to-end against the backend
 
 ## Project Structure
 
@@ -46,6 +46,20 @@ backend/
       seed.py                  # demo admin/support users + sample tickets
   tests/                        # pytest + httpx test suite
   requirements.txt
+
+frontend/
+  src/
+    api/           # axios instance + one service module per resource (auth, tickets, admin)
+    context/         # AuthContext + RequireAuth/RequireAdmin/RequireSupport route guards
+    components/        # Badge, Modal, Pagination, StatCard, states, Support/Admin layout shells
+    pages/
+      Login.jsx
+      support/            # MyTickets, CreateTicket, TicketDetails
+      admin/               # Dashboard, AllTickets, TicketDetails
+    lib/                     # date/format helpers
+    App.jsx                   # routes
+  index.html
+  package.json
 
 CLAUDE.md   # assignment spec & engineering conventions
 README.md
@@ -135,12 +149,34 @@ cd backend
 pytest -q
 ```
 
-## Frontend
+## Getting Started (Frontend)
 
-Not yet implemented. Planned structure and pages are documented in [`CLAUDE.md`](./CLAUDE.md#suggested-architecture).
+The backend must be running first (see above) so the frontend has an API to call.
+
+```bash
+cd frontend
+npm install
+
+# .env already points VITE_API_BASE_URL at http://127.0.0.1:8000 — edit it if your backend runs elsewhere
+npm run dev
+```
+
+The app runs at `http://localhost:5173`. Log in with one of the seeded accounts:
+
+- Admin: `admin / admin123`
+- Support: `alice / alice123` or `bob / bob123`
+
+### Frontend Architecture
+
+- **Routing:** React Router, with `RequireAuth` / `RequireSupport` / `RequireAdmin` guards in `context/AuthContext.jsx` redirecting unauthenticated or wrong-role users (e.g. a support user hitting `/admin` is bounced to `/tickets`, mirroring the backend's `403` boundary).
+- **API layer:** `src/api/client.js` holds a single axios instance that attaches the JWT from `localStorage` to every request and clears auth on a `401`. `authApi.js`, `ticketsApi.js`, and `adminApi.js` each wrap one backend resource — components never call axios directly.
+- **Support flow:** `MyTickets` (list), `CreateTicket` (client-side validation matching the backend's title/description length rules), `TicketDetails` (editable only while `status === open`, matching the backend's edit/delete gate — a closed/in-progress ticket renders read-only).
+- **Admin flow:** `Dashboard` (stats + tickets-by-assignee), `AllTickets` (debounced search, status filter, pagination), `TicketDetails` (status stepper that only allows the single forward transition the backend permits, assignment dropdown, delete with a confirmation modal).
+- **Design system:** built to match a Stitch-generated design (Tailwind v4 tokens for color/type/radius in `src/index.css`), reused across support and admin surfaces as shared `Badge`, `StatCard`, `Modal`, `Pagination`, and layout components.
 
 ## Assumptions & Limitations
 
 - No user self-registration endpoint — accounts are provisioned via the seed script (matches the assignment's username/password-only auth scope; a registration flow was out of scope).
 - JWTs are long-lived (24h by default) with no refresh-token flow yet.
 - SQLite is used intentionally so the project runs with zero external setup.
+- The frontend stores the JWT in `localStorage` (not an httpOnly cookie) for simplicity; acceptable for this project's scope but not a production-grade token storage strategy.

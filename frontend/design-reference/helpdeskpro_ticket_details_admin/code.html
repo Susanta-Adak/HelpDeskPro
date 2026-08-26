@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HelpDeskPro - Ticket Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#f8f9fa",
+                      "surface-dim": "#d9dadb",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed-dim": "#6bd8cb",
+                      "on-secondary": "#ffffff",
+                      "primary": "#3525cd",
+                      "on-primary-container": "#dad7ff",
+                      "surface-variant": "#e1e3e4",
+                      "on-surface-variant": "#464555",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#191c1d",
+                      "secondary-container": "#86f2e4",
+                      "on-primary-fixed": "#0f0069",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f3f4f5",
+                      "surface-tint": "#4d44e3",
+                      "inverse-surface": "#2e3132",
+                      "on-secondary-fixed-variant": "#005049",
+                      "on-tertiary-container": "#ffd2be",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#e1e3e4",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "outline": "#777587",
+                      "on-secondary-fixed": "#00201d",
+                      "tertiary-container": "#a44100",
+                      "on-secondary-container": "#006f66",
+                      "on-surface": "#191c1d",
+                      "on-tertiary-fixed-variant": "#7b2f00",
+                      "tertiary": "#7e3000",
+                      "tertiary-fixed": "#ffdbcc",
+                      "surface-container": "#edeeef",
+                      "primary-container": "#4f46e5",
+                      "tertiary-fixed-dim": "#ffb695",
+                      "on-tertiary-fixed": "#351000",
+                      "outline-variant": "#c7c4d8",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed": "#e2dfff",
+                      "secondary": "#006a61",
+                      "background": "#f8f9fa",
+                      "secondary-fixed": "#89f5e7",
+                      "surface-container-high": "#e7e8e9",
+                      "inverse-primary": "#c3c0ff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "surface-bright": "#f8f9fa",
+                      "on-error": "#ffffff",
+                      "on-error-container": "#93000a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "xl": "32px",
+                      "gutter": "20px",
+                      "sm": "8px",
+                      "container-max": "1440px",
+                      "margin-mobile": "16px",
+                      "xs": "4px",
+                      "md": "16px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .custom-shadow-card {
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.04);
+        }
+        .custom-shadow-modal {
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.08);
+        }
+        .hide-modal {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md h-screen overflow-hidden flex selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar (Shared Component JSON) -->
+<nav class="w-[240px] h-screen fixed left-0 top-0 bg-surface-container-lowest border-r border-surface-variant shadow-sm flex flex-col h-full py-lg z-20">
+<!-- Header / Brand -->
+<div class="px-md mb-xl">
+<div class="flex items-center gap-sm mb-xs">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+</div>
+<h1 class="font-display-lg text-display-lg font-bold text-primary truncate text-xl">HelpDeskPro</h1>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Enterprise Support</p>
+</div>
+<!-- Primary Action -->
+<div class="px-md mb-lg">
+<button class="w-full h-[44px] bg-primary text-on-primary rounded font-label-md text-label-md flex items-center justify-center gap-xs hover:bg-primary-fixed-dim hover:text-on-primary-fixed-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Create Ticket
+            </button>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 overflow-y-auto px-sm space-y-1">
+<a class="flex items-center gap-md px-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<!-- Active State Navigation -->
+<a class="flex items-center gap-md px-md py-2 rounded-lg text-primary font-bold border-r-4 border-primary bg-surface-container-lowest active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+<span class="font-body-md text-body-md">My Tickets</span>
+</a>
+<a class="flex items-center gap-md px-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">bar_chart</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="flex items-center gap-md px-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">groups</span>
+<span class="font-body-md text-body-md">Team</span>
+</a>
+<a class="flex items-center gap-md px-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+<!-- Footer Links -->
+<div class="px-sm mt-auto pt-4">
+<a class="flex items-center gap-md px-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">help_outline</span>
+<span class="font-body-md text-body-md">Help Center</span>
+</a>
+</div>
+</nav>
+<!-- TopAppBar (Shared Component JSON) -->
+<header class="h-16 fixed top-0 right-0 left-[240px] z-10 bg-surface-container-lowest border-b border-surface-variant flex justify-between items-center px-lg w-[calc(100%-240px)]">
+<!-- Search / Left side elements -->
+<div class="flex items-center gap-md flex-1">
+<!-- Simulated Search Bar Input styling based on design system -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-[36px] pl-10 pr-3 rounded-lg border border-surface-variant bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all" placeholder="Search tickets..." type="text"/>
+</div>
+<nav class="hidden md:flex gap-md ml-lg">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-all cursor-pointer active:opacity-70" href="#">Docs</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-all cursor-pointer active:opacity-70" href="#">Updates</a>
+</nav>
+</div>
+<!-- Trailing Actions / Right side -->
+<div class="flex items-center gap-sm">
+<button class="w-[36px] h-[36px] rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-all active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-[1px] h-[24px] bg-surface-variant mx-xs"></div>
+<div class="flex items-center gap-sm cursor-pointer hover:opacity-80 transition-opacity ml-xs">
+<img alt="User Avatar" class="w-8 h-8 rounded-full object-cover border border-surface-variant" data-alt="A professional headshot of a corporate IT administrator, modern well-lit office background, calm and professional demeanor, high resolution, soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIrt5ByMV8ZjPEIA9S2YZyNo3JJJswL-9JeIMblQqI_-5d3Kukce-TcXTdQ6bXYeEUfHtfqNmeZ42P3zDGwtLYiL47MkkBl9eWjS1d-9__qRUbmth5VHeFpJpjuPhpnL3dcBbmavd90LZHIp-feAHH5zn-nOMpCLH2SQG8BBqE5CUpt6OeKu2OKas_1Ye49VPNIjbttbqoKW9hKyllfl9DjZLe_bjF8T37TJrnjrLrLIqNPVOY3NlRkA"/>
+<span class="font-label-md text-label-md text-on-surface hidden lg:block">Admin User</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">arrow_drop_down</span>
+</div>
+<button class="ml-sm px-sm py-1 font-label-md text-label-md text-primary hover:bg-primary-container/10 rounded transition-colors">
+                Logout
+            </button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[240px] mt-16 p-lg w-full h-[calc(100vh-64px)] overflow-y-auto bg-surface relative">
+<div class="max-w-4xl mx-auto space-y-lg pb-xl">
+<!-- Breadcrumb / Back Navigation -->
+<nav class="flex items-center gap-xs text-on-surface-variant font-label-md text-label-md mb-md">
+<a class="hover:text-primary transition-colors flex items-center gap-xs" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                    All Tickets
+                </a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-on-surface">#TKT-4921</span>
+</nav>
+<!-- Main Ticket Card -->
+<article class="bg-surface-container-lowest rounded-xl custom-shadow-card border border-surface-variant overflow-hidden">
+<!-- Card Header Area -->
+<div class="p-lg border-b border-surface-variant">
+<div class="flex justify-between items-start gap-md mb-md">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">
+                            #TKT-4921: Unable to access production database cluster
+                        </h2>
+<!-- Status Badge -->
+<div class="shrink-0 bg-primary-container/10 text-primary px-3 py-1 rounded-full border border-primary/20 flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Open</span>
+</div>
+</div>
+<!-- Metadata Row -->
+<div class="flex items-center gap-lg flex-wrap">
+<div class="flex items-center gap-sm">
+<img alt="Sarah Jenkins" class="w-6 h-6 rounded-full object-cover" data-alt="A small circular avatar portrait of a young professional female engineer named Sarah Jenkins, clean corporate style, soft natural lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg2U0oLlrqOhvg-gFGCaTcTLHrMg5Ie7EQSGEFtZrMIlMmSSTGQARznTdYPXtIYixcgT5R6BkKpMVDHRQUIGHLxIqOrro05T0kEf-SV7l75vyLa8whpG6yZ37KS27-H6842i8yeBfQZp52T6r9PIFlgWW64FnYM6JzqXJAA3upaeg1UrEH-ElXvlIjI5u8dN1j0Fr7lPhFy8raCDUHnBWvJWpU_VK6i0XTguSmkL-qTm3mNQZdx___eQ"/>
+<span class="font-body-md text-body-md text-on-surface-variant">
+                                Requested by <span class="font-label-md text-label-md text-on-surface">Sarah Jenkins</span>
+</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span class="font-body-md text-body-md">Oct 24, 2023 at 09:14 AM</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">sell</span>
+<span class="bg-surface-container-low px-2 py-0.5 rounded text-[12px]">Database</span>
+<span class="bg-surface-container-low px-2 py-0.5 rounded text-[12px]">Production</span>
+</div>
+</div>
+</div>
+<!-- Ticket Body Description -->
+<div class="p-lg">
+<div class="prose prose-sm max-w-none text-on-surface font-body-md text-body-md leading-relaxed whitespace-pre-wrap">
+Hello IT Team,
+
+Since this morning (around 8:45 AM EST), our backend services have been failing to connect to the primary production database cluster (us-east-prod-db-01). 
+
+Error logs show connection timeouts and SSL handshake failures. I have verified that my local VPN connection is stable and I can access other internal tools without issue. 
+
+This is currently blocking the deployment of the v2.4 release schedule for this afternoon. Please advise on any ongoing maintenance or if credentials need to be rotated.
+
+Steps to reproduce:
+1. Attempt connection via internal CLI tool `db-connect --env prod`
+2. Observe timeout after 30 seconds.
+
+Thanks,
+Sarah
+                    </div>
+</div>
+</article>
+<!-- Admin Controls Section (Bento Grid Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Status Control Card -->
+<div class="bg-surface-container-lowest rounded-xl custom-shadow-card border border-surface-variant p-md">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-sm">Change Status</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Update the current state of this ticket.</p>
+<!-- Segmented Control / Stepper -->
+<div class="flex bg-surface-container-low p-1 rounded-lg">
+<button class="flex-1 py-1.5 px-3 rounded-md bg-surface-container-lowest custom-shadow-card text-primary font-label-md text-label-md transition-all">
+                            Open
+                        </button>
+<button class="flex-1 py-1.5 px-3 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 font-body-md text-body-md transition-all">
+                            In Progress
+                        </button>
+<button class="flex-1 py-1.5 px-3 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 font-body-md text-body-md transition-all">
+                            Closed
+                        </button>
+</div>
+</div>
+<!-- Assignment Control Card -->
+<div class="bg-surface-container-lowest rounded-xl custom-shadow-card border border-surface-variant p-md">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-sm">Assign To</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Select an agent to handle this request.</p>
+<div class="relative">
+<label class="sr-only">Assign to Agent</label>
+<button class="w-full flex items-center justify-between bg-surface-container-lowest border border-surface-variant rounded-lg px-3 py-2 hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/10">
+<div class="flex items-center gap-sm">
+<img alt="Alex Johnson" class="w-6 h-6 rounded-full object-cover" data-alt="A small avatar of a male IT support agent named Alex Johnson, friendly expression, modern office setting, clear sharp photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMaKuGFfNMGYvzAUSoiuSR9A-_rSaWvcIR2ipxIUEiCMgStNFPCgZsa4Ar3kopyeFHYQQ-fstFoFsdSI2tlBnTzK28hOXvocDBwtMvDMx-jGAus7OFFTH3lbpFYDFKkeOJFiIMB49gIqk4PRx4SZdwa7F4Sw9UebbBOmrXjZ4OBGRUXzv5UwBppw7D5Qt2K02BgAh0W_1zut_bnFP6QLibNZc_yt96_lYKFQETvh8Lsz-4e8R-I7wh8g"/>
+<span class="font-label-md text-label-md text-on-surface">Alex Johnson</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">unfold_more</span>
+</button>
+<!-- Dropdown mockup (hidden by default in standard view, shown here implicitly as a closed state) -->
+</div>
+</div>
+</div>
+<!-- Destructive Action Area -->
+<div class="flex justify-end pt-lg">
+<button class="h-[36px] px-4 rounded border border-error text-error bg-error-container/10 hover:bg-error hover:text-on-error font-label-md text-label-md transition-all flex items-center gap-xs" id="triggerDeleteModal">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+                    Delete Ticket
+                </button>
+</div>
+</div>
+</main>
+<!-- Delete Confirmation Modal (Overlay) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-background/40 backdrop-blur-sm hide-modal transition-opacity duration-200" id="deleteModal">
+<div class="bg-surface-container-lowest rounded-xl custom-shadow-modal border border-surface-variant max-w-sm w-full overflow-hidden transform scale-95 opacity-0 transition-all duration-200" id="modalContent">
+<div class="p-lg text-center flex flex-col items-center">
+<div class="w-12 h-12 rounded-full bg-error-container/20 flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-error text-[24px]">warning</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-sm">Delete Ticket</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">
+                    Are you sure you want to delete this ticket? This action cannot be undone and will remove all associated data and comments.
+                </p>
+<div class="flex w-full gap-sm">
+<button class="flex-1 h-[36px] bg-surface-container-lowest border border-surface-variant text-on-surface font-label-md text-label-md rounded hover:bg-surface-container-low transition-colors" id="cancelDeleteBtn">
+                        Cancel
+                    </button>
+<button class="flex-1 h-[36px] bg-error text-on-error font-label-md text-label-md rounded hover:bg-error/90 transition-colors">
+                        Delete
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Simple script for modal interaction -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('deleteModal');
+            const modalContent = document.getElementById('modalContent');
+            const triggerBtn = document.getElementById('triggerDeleteModal');
+            const cancelBtn = document.getElementById('cancelDeleteBtn');
+
+            function openModal() {
+                modal.classList.remove('hide-modal');
+                // Small timeout to allow display:block to apply before animating opacity/transform
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+
+            function closeModal() {
+                modalContent.classList.remove('scale-100', 'opacity-100');
+                modalContent.classList.add('scale-95', 'opacity-0');
+                modal.classList.add('opacity-0');
+                
+                setTimeout(() => {
+                    modal.classList.add('hide-modal');
+                }, 200); // match transition duration
+            }
+
+            triggerBtn.addEventListener('click', openModal);
+            cancelBtn.addEventListener('click', closeModal);
+            
+            // Close on outside click
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body></html>

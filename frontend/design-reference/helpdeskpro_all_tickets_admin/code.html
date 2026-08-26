@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>All Tickets - Admin Dashboard</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-fixed": "#00201d",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#006f66",
+                        "primary": "#3525cd",
+                        "secondary-container": "#86f2e4",
+                        "surface": "#f8f9fa",
+                        "secondary-fixed": "#89f5e7",
+                        "inverse-primary": "#c3c0ff",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "outline": "#777587",
+                        "primary-fixed": "#e2dfff",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "on-primary-fixed": "#0f0069",
+                        "inverse-on-surface": "#f0f1f2",
+                        "secondary": "#006a61",
+                        "outline-variant": "#c7c4d8",
+                        "on-secondary-fixed-variant": "#005049",
+                        "tertiary-container": "#a44100",
+                        "on-background": "#191c1d",
+                        "on-tertiary-container": "#ffd2be",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e1e3e4",
+                        "surface-container-low": "#f3f4f5",
+                        "tertiary": "#7e3000",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "inverse-surface": "#2e3132",
+                        "background": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-container": "#edeeef",
+                        "primary-container": "#4f46e5",
+                        "on-primary-container": "#dad7ff",
+                        "on-tertiary-fixed": "#351000",
+                        "surface-tint": "#4d44e3",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#464555"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "margin-mobile": "16px",
+                        "gutter": "20px",
+                        "md": "16px",
+                        "base": "4px",
+                        "xs": "4px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "label-sm": ["Inter", "sans-serif"],
+                        "display-lg": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    },
+                    boxShadow: {
+                        'level-1': '0 4px 12px rgba(0, 0, 0, 0.04)',
+                        'level-2': '0 10px 20px rgba(0, 0, 0, 0.08)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex min-h-screen">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface text-primary dark:text-primary-fixed-dim w-[240px] h-screen fixed left-0 top-0 border-r border-surface-variant dark:border-outline-variant shadow-sm flex flex-col h-full py-lg z-20">
+<!-- Header -->
+<div class="px-md mb-xl flex items-center gap-sm">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-on-primary font-bold">
+                H
+            </div>
+<div>
+<h1 class="font-display-lg text-display-lg font-bold text-primary dark:text-inverse-primary" style="font-size: 20px; line-height: 28px;">HelpDeskPro</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Enterprise Support</p>
+</div>
+</div>
+<!-- Main Navigation -->
+<ul class="flex flex-col gap-sm px-md flex-1">
+<li>
+<a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+</li>
+<li>
+<!-- Semantic Match: "All Tickets" maps to "My Tickets" pattern, forced active for admin view -->
+<a class="flex items-center gap-md px-sm py-2 rounded-lg text-primary dark:text-primary-fixed-dim font-bold border-r-4 border-primary bg-surface-container-low hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
+<span class="font-label-md text-label-md">My Tickets</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Team</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+</ul>
+<!-- Footer / CTA -->
+<div class="px-md mt-auto flex flex-col gap-md">
+<button class="w-full bg-primary text-on-primary py-2 rounded-lg font-label-md text-label-md font-semibold hover:bg-surface-tint transition-colors active:scale-95 h-[44px]">
+                Create Ticket
+            </button>
+<ul class="flex flex-col gap-sm">
+<li>
+<a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-label-md text-label-md">Help Center</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- TopAppBar (Shared Component) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface text-primary dark:text-primary-fixed-dim h-16 fixed top-0 right-0 left-[240px] z-10 border-b border-surface-variant dark:border-outline-variant flex justify-between items-center px-lg w-[calc(100%-240px)]">
+<!-- Search & Links (Left) -->
+<div class="flex items-center gap-lg flex-1">
+<h2 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary hidden md:block">HelpDeskPro</h2>
+<nav class="hidden md:flex items-center gap-md h-full">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all cursor-pointer transition-opacity active:opacity-70 flex items-center h-full" href="#">Docs</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all cursor-pointer transition-opacity active:opacity-70 flex items-center h-full" href="#">Updates</a>
+</nav>
+</div>
+<!-- Actions & Profile (Right) -->
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+<div class="w-px h-6 bg-surface-variant mx-2"></div>
+<button class="font-label-md text-label-md font-semibold text-primary hover:text-surface-tint transition-colors cursor-pointer transition-opacity active:opacity-70">
+                Logout
+            </button>
+<img alt="User Avatar" class="w-8 h-8 rounded-full object-cover border border-surface-variant cursor-pointer" data-alt="A small, circular profile avatar showing a professional person smiling slightly against a soft, light background, corporate SaaS style, well lit." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9o5W1mQBsuIqMK1fUZlnQSMA7OVGJp8n08PBTGBfhB_8kef28viUPOHlT21MvLRdqXcAukn_9nlanrbNgy_VgWqFn8G0ZQEHgN37sNX8eJjh2mFIXlT7ut8C3OJoeVABMILQ_i27O2WQs0qhxm3sGviaHtMtJ7b0atB0ulgoV56UCFqKvwmsMjEWGmAz-72-vtm_cNOACu3P_Q16SMrYBzYwi5B4b469p-9UwI6nq683DK6BJUYjKtA"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[240px] mt-16 p-lg w-[calc(100%-240px)] min-h-[calc(100vh-64px)] bg-surface">
+<!-- Header Section -->
+<div class="mb-lg">
+<h1 class="font-headline-lg text-headline-lg text-on-background mb-sm">All Tickets</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage and monitor all support requests across the organization.</p>
+</div>
+<!-- Controls Bar -->
+<div class="flex flex-col sm:flex-row gap-md justify-between items-center mb-lg bg-surface-container-lowest p-md rounded-lg shadow-level-1 border border-surface-variant">
+<!-- Search -->
+<div class="relative w-full sm:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-shadow h-[36px]" placeholder="Search by title or user" type="text"/>
+</div>
+<!-- Filters & Actions -->
+<div class="flex gap-md w-full sm:w-auto">
+<div class="relative">
+<select class="appearance-none bg-surface border border-outline-variant rounded-lg pl-4 pr-10 py-2 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 cursor-pointer h-[36px]">
+<option>Status: All</option>
+<option>Status: Open</option>
+<option>Status: In Progress</option>
+<option>Status: Closed</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+<button class="bg-surface border border-outline-variant text-primary rounded-lg px-4 py-2 font-label-md text-label-md font-semibold hover:bg-surface-container-low transition-colors h-[36px] flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                    More Filters
+                </button>
+</div>
+</div>
+<!-- Tickets Table Container -->
+<div class="bg-surface-container-lowest rounded-xl shadow-level-1 border border-surface-variant overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[800px]">
+<thead>
+<tr class="border-b border-surface-variant bg-surface/50">
+<th class="py-3 px-md font-label-md text-label-md text-on-surface-variant font-semibold">Title</th>
+<th class="py-3 px-md font-label-md text-label-md text-on-surface-variant font-semibold">Creator</th>
+<th class="py-3 px-md font-label-md text-label-md text-on-surface-variant font-semibold">Assigned To</th>
+<th class="py-3 px-md font-label-md text-label-md text-on-surface-variant font-semibold">Status</th>
+<th class="py-3 px-md font-label-md text-label-md text-on-surface-variant font-semibold">Created Date</th>
+<th class="py-3 px-md font-label-md text-label-md text-on-surface-variant font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant font-body-md text-body-md text-on-surface">
+<!-- Row 1 -->
+<tr class="hover:bg-surface transition-colors h-12 group">
+<td class="py-2 px-md font-semibold">Cannot access VPN remotely</td>
+<td class="py-2 px-md">
+<div class="flex items-center gap-sm">
+<img class="w-6 h-6 rounded-full object-cover" data-alt="Small circular portrait of a professional woman in a modern corporate setting, clean lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCH4ywFyFPtkkBJXET_jlwUWuoF8K46TbJxIKIe53OvpfDwVnh3UpApA-rL1GKmtmLJUBfkwLDyD804wBLSwi3m8XV22d5SvPBobVIiAbyj-w5d4NVnOywXblEzcCFdMpUCewZQKOLhIiFApfEJ6YY1WOv_3bO5xUDeThXZdQYh6c2dHLcWwULBzWlhQ8wGHkVZZgvZa8tRu8XjDXv08Gg4mqqkCiiZh7OhobKK7wKwXIKGpJi3U1c4_w"/>
+<span>Sarah Jenkins</span>
+</div>
+</td>
+<td class="py-2 px-md">
+<div class="flex items-center gap-sm">
+<img class="w-6 h-6 rounded-full object-cover" data-alt="Small circular portrait of an IT technician in a server room, soft focus background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN7zeS5H8IUU3JTcvSjlmSaY7HftZDeDVlxyiD-9hZTVKMOqDXoxqiCAW5w4lLybodC73TwdDVZP7nvRS0Ouxg2GXELofLJ9Dv6yd_WaBhLSS90u7l_mN1Ui10HZuGW5xuN2scOgMq__qNQZB5oyOZNSqq6VXD2GQ6XmcXUq6GuJ_LYZeUUmGFt1KxtQiF-15gwzHDtfMSNetNAW8_OwoBG8g21AqTLGKl0LG8falt0KKoChPKKR96kw"/>
+<span>Mike O'Reilly</span>
+</div>
+</td>
+<td class="py-2 px-md">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-label-sm font-label-sm bg-primary/10 text-primary">Open</span>
+</td>
+<td class="py-2 px-md text-on-surface-variant">Oct 24, 09:41 AM</td>
+<td class="py-2 px-md text-right relative">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-low">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface transition-colors h-12 group">
+<td class="py-2 px-md font-semibold">New laptop request for marketing hire</td>
+<td class="py-2 px-md">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-xs">DB</div>
+<span>David Brooks</span>
+</div>
+</td>
+<td class="py-2 px-md">
+<div class="flex items-center gap-sm">
+<img class="w-6 h-6 rounded-full object-cover" data-alt="Small circular portrait of a female IT support agent smiling, well lit office setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCP-euOvSjOIwuuctb32N87gdfVJxaz38Hyb2Eh4nfxF_rWJaXxDczocCd_0enLhW-KUhgfKSdL63d6bWZUTFabW49Vo9YdEtn_2pJa_QDU4V5io3pwdi5CYnLSbK2uMWemTRQJwQiwZzGOWeKBldc469Be33OocPh5PKyFx4WFlPkYDohLUzxr218hBFztBG19OCwGsSmmdFM22gUuVH4opfo-m1-NBCS5vtjSiVDbu1MCkRkbKoxxhg"/>
+<span>Elena Rostova</span>
+</div>
+</td>
+<td class="py-2 px-md">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-label-sm font-label-sm bg-tertiary-container/10 text-tertiary-container">In Progress</span>
+</td>
+<td class="py-2 px-md text-on-surface-variant">Oct 23, 14:22 PM</td>
+<td class="py-2 px-md text-right relative">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-low">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface transition-colors h-12 group">
+<td class="py-2 px-md font-semibold">Password reset loop on internal portal</td>
+<td class="py-2 px-md">
+<div class="flex items-center gap-sm">
+<img class="w-6 h-6 rounded-full object-cover" data-alt="Small circular portrait of an older gentleman with glasses, professional attire, soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTvG-bVaVNL1DRhb3s_JdsoCAtZs9FWy71pvkTpwCCBvvn9DatN0r5pa9WM5xXa2B2pyeL89gImTVltBYPL-QH77uEGmbwCUpqDqzYTXPps5VozEspjdOm_gLZ5GAqOg9L0FLtFhz4Z0X1iLlwuui9ABuyKgMyL-nIJpRsdWw3gTFX8KK-czJedGWVmtTDfeLtuGTRAYkdSwryGMLGfg--a4AmBEnR4wW-mAON3GfpTqNPeFCFRpcQKw"/>
+<span>Arthur Pendelton</span>
+</div>
+</td>
+<td class="py-2 px-md">
+<span class="text-on-surface-variant italic text-sm">Unassigned</span>
+</td>
+<td class="py-2 px-md">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-label-sm font-label-sm bg-primary/10 text-primary">Open</span>
+</td>
+<td class="py-2 px-md text-on-surface-variant">Oct 23, 11:05 AM</td>
+<td class="py-2 px-md text-right relative">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-low">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface transition-colors h-12 group">
+<td class="py-2 px-md font-semibold">Software license renewal: Adobe CC</td>
+<td class="py-2 px-md">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-xs">LM</div>
+<span>Linda May</span>
+</div>
+</td>
+<td class="py-2 px-md">
+<div class="flex items-center gap-sm">
+<img class="w-6 h-6 rounded-full object-cover" data-alt="Small circular portrait of a young male administrator in a clean modern office, soft diffuse light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZlwVfXJnJVgKrFZdDBN44RQTcpeE7tJSWFCk77G8EIKxEAt-yRj82G2pOe0eTZ8j5gNUv1LZRkVyC8YUNu0BHZw67cdnT-CWrrUvBs4GxGqc5E8yCokvGL519Cft8o5h8BHKYe4W3TtlbnXyfI7x-DSjskwF1_NLIVtcvs73eVFGyJWpvQZSEEz0U4Zf2UJRRbC57x8-39EN62rZU5p7kOQjFA8glWZpZJjkkIkIYw9UY743nQggsVA"/>
+<span>James Chen</span>
+</div>
+</td>
+<td class="py-2 px-md">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-label-sm font-label-sm bg-surface-variant text-on-surface-variant">Closed</span>
+</td>
+<td class="py-2 px-md text-on-surface-variant">Oct 22, 16:40 PM</td>
+<td class="py-2 px-md text-right relative">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-low">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="border-t border-surface-variant bg-surface/30 p-md flex flex-col sm:flex-row justify-between items-center gap-md">
+<span class="font-body-md text-body-md text-on-surface-variant">Showing 1-4 of 152 tickets</span>
+<div class="flex items-center gap-sm">
+<button class="w-8 h-8 rounded border border-outline-variant bg-surface flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded border border-primary bg-primary/10 flex items-center justify-center text-primary font-label-sm font-bold">1</button>
+<button class="w-8 h-8 rounded border border-outline-variant bg-surface flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-sm">2</button>
+<button class="w-8 h-8 rounded border border-outline-variant bg-surface flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-sm">3</button>
+<span class="text-on-surface-variant">...</span>
+<button class="w-8 h-8 rounded border border-outline-variant bg-surface flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>
