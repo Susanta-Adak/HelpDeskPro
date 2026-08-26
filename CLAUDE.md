@@ -4,7 +4,7 @@ This file gives Claude (and any other contributor) context on the project so it 
 
 ## Project Overview
 
-**Name:** Deskly — Mini Helpdesk / Ticket Management System
+**Name:** HelpDeskPro — Mini Helpdesk / Ticket Management System
 **Type:** Technical interview assignment / portfolio project
 **Goal:** A small role-based helpdesk app with two user types — Support User (manages own tickets) and Admin (manages all tickets, assignment, and statistics).
 
