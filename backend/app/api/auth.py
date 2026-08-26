@@ -17,5 +17,10 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)) -> TokenResponse
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="This account has been deactivated. Contact an admin.",
+        )
     token = create_access_token(subject=user.username, role=user.role.value)
     return TokenResponse(access_token=token, user=user)

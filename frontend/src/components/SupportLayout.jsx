@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Icon from "./Icon";
+import Avatar from "./Avatar";
 import logo from "../assets/logo.png";
 
 const NAV_ITEMS = [{ to: "/tickets", label: "My Tickets", icon: "confirmation_number" }];
@@ -49,9 +50,7 @@ export default function SupportLayout({ children }) {
         </div>
         <div className="px-3 mt-auto pt-4 border-t border-surface-variant">
           <div className="flex items-center gap-3 px-3 py-2">
-            <div className="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center text-sm font-semibold">
-              {user?.username?.[0]?.toUpperCase()}
-            </div>
+            <Avatar name={user?.username} />
             <div className="min-w-0">
               <p className="text-sm font-medium text-on-surface truncate">{user?.username}</p>
               <p className="text-[11px] text-on-surface-variant">Support</p>

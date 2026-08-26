@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Icon from "./Icon";
 import { CATEGORY_LABELS, PRIORITY_LABELS } from "../lib/ticket";
+import { formatBytes } from "../lib/format";
 
 const TITLE_MIN = 3;
 const TITLE_MAX = 200;
@@ -9,12 +10,6 @@ const DESC_MIN = 10;
 const DESC_MAX = 5000;
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "application/pdf"];
-
-function formatBytes(bytes) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
 
 export default function TicketForm({ onSubmit, cancelTo, submitLabel = "Submit Ticket" }) {
   const fileInputRef = useRef(null);

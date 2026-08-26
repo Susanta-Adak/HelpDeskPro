@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app.core.deps import require_admin
@@ -13,8 +13,8 @@ from app.schemas.ticket import (
     TicketOut,
     TicketStatusUpdate,
 )
-from app.schemas.user import UserOut
-from app.services import ticket_service
+from app.schemas.user import UserCreate, UserOut, UserStatusUpdate
+from app.services import ticket_service, user_service
 
 router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(require_admin)])
 
@@ -87,9 +87,35 @@ def dashboard_stats(db: Session = Depends(get_db)) -> DashboardStats:
 
 @router.get("/support-users", response_model=list[UserOut])
 def list_support_users(db: Session = Depends(get_db)) -> list[User]:
-    return db.query(User).filter(User.role == UserRole.SUPPORT).order_by(User.username).all()
+    return (
+        db.query(User)
+        .filter(User.role == UserRole.SUPPORT, User.is_active.is_(True))
+        .order_by(User.username)
+        .all()
+    )
 
 
 @router.get("/team-overview", response_model=list[AgentOverview])
 def team_overview(db: Session = Depends(get_db)) -> list[dict]:
     return ticket_service.get_team_overview(db)
+
+
+@router.get("/users", response_model=list[UserOut])
+def list_users(db: Session = Depends(get_db)) -> list[User]:
+    return user_service.list_users(db)
+
+
+@router.post("/users", response_model=UserOut, status_code=status.HTTP_201_CREATED)
+def create_user(payload: UserCreate, db: Session = Depends(get_db)) -> User:
+    return user_service.create_user(db, payload.username, payload.password, payload.role)
+
+
+@router.patch("/users/{user_id}/status", response_model=UserOut)
+def update_user_status(
+    user_id: int,
+    payload: UserStatusUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin),
+) -> User:
+    target = user_service.get_user_or_404(db, user_id)
+    return user_service.set_user_active(db, target, current_user, payload.is_active)

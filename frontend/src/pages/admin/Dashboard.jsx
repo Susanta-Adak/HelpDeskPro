@@ -3,6 +3,7 @@ import AdminLayout from "../../components/AdminLayout";
 import StatCard from "../../components/StatCard";
 import DonutChart from "../../components/DonutChart";
 import Icon from "../../components/Icon";
+import Avatar from "../../components/Avatar";
 import { LoadingState, ErrorState, EmptyState } from "../../components/States";
 import { getDashboardStats, getTeamOverview } from "../../api/adminApi";
 import { extractErrorMessage } from "../../api/client";
@@ -34,9 +35,7 @@ function AgentStatusPill({ status }) {
 function AgentRow({ agent }) {
   return (
     <div className="flex items-center gap-3 py-3 border-b border-surface-variant last:border-b-0">
-      <div className="w-8 h-8 shrink-0 rounded-full bg-primary-fixed text-primary flex items-center justify-center text-xs font-semibold">
-        {agent.username[0]?.toUpperCase()}
-      </div>
+      <Avatar name={agent.username} />
       <span className="text-sm font-medium text-on-surface flex-1 truncate">{agent.username}</span>
       <span className="text-sm text-on-surface-variant tabular-nums w-24">
         {agent.active_tickets} active

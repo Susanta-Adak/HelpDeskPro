@@ -43,3 +43,18 @@ export async function getTeamOverview() {
   const { data } = await apiClient.get("/admin/team-overview");
   return data;
 }
+
+export async function listUsers() {
+  const { data } = await apiClient.get("/admin/users");
+  return data;
+}
+
+export async function createUser({ username, password, role }) {
+  const { data } = await apiClient.post("/admin/users", { username, password, role });
+  return data;
+}
+
+export async function updateUserStatus(userId, isActive) {
+  const { data } = await apiClient.patch(`/admin/users/${userId}/status`, { is_active: isActive });
+  return data;
+}
