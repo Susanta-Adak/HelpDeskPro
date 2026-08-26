@@ -6,6 +6,7 @@ import CreateTicket from "./pages/support/CreateTicket";
 import SupportTicketDetails from "./pages/support/TicketDetails";
 import Dashboard from "./pages/admin/Dashboard";
 import AllTickets from "./pages/admin/AllTickets";
+import AdminCreateTicket from "./pages/admin/CreateTicket";
 import AdminTicketDetails from "./pages/admin/TicketDetails";
 
 function Home() {
@@ -71,6 +72,14 @@ export default function App() {
             element={
               <RequireAdmin>
                 <AllTickets />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/admin/tickets/new"
+            element={
+              <RequireAdmin>
+                <AdminCreateTicket />
               </RequireAdmin>
             }
           />

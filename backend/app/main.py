@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import admin, auth, tickets
 from app.core.config import settings
+from app.core.files import UPLOAD_DIR
 from app.db.base import Base
 from app.db.session import engine
 
@@ -12,6 +13,7 @@ from app.db.session import engine
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
+    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
     yield
 
 

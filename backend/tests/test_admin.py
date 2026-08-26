@@ -1,5 +1,9 @@
 def create_ticket(client, headers, title="Printer is broken", description="It jams every time I print."):
-    return client.post("/tickets", json={"title": title, "description": description}, headers=headers)
+    return client.post(
+        "/tickets",
+        data={"title": title, "description": description, "category": "technical", "priority": "medium"},
+        headers=headers,
+    )
 
 
 def test_support_user_cannot_hit_admin_endpoints(client, support_headers):
@@ -107,6 +111,23 @@ def test_admin_delete_ticket(client, support_headers, admin_headers):
 
     resp = client.get(f"/admin/tickets/{ticket['id']}", headers=admin_headers)
     assert resp.status_code == 404
+
+
+def test_team_overview(client, support_headers, other_support_headers, admin_headers, other_support_user):
+    ticket = create_ticket(client, support_headers).json()
+    client.patch(
+        f"/admin/tickets/{ticket['id']}/assign",
+        json={"assignee_id": other_support_user.id},
+        headers=admin_headers,
+    )
+
+    resp = client.get("/admin/team-overview", headers=admin_headers)
+    assert resp.status_code == 200
+    by_username = {row["username"]: row for row in resp.json()}
+    assert by_username["bob"]["active_tickets"] == 1
+    assert by_username["bob"]["status"] == "active"
+    assert by_username["alice"]["active_tickets"] == 0
+    assert by_username["alice"]["status"] == "idle"
 
 
 def test_dashboard_stats(client, support_headers, admin_headers):

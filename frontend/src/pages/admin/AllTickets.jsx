@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AdminLayout from "../../components/AdminLayout";
-import StatusBadge from "../../components/Badge";
+import StatusBadge, { PriorityBadge } from "../../components/Badge";
 import Icon from "../../components/Icon";
 import Pagination from "../../components/Pagination";
 import { LoadingState, ErrorState, EmptyState } from "../../components/States";
 import { listAllTickets } from "../../api/adminApi";
 import { extractErrorMessage } from "../../api/client";
 import { formatDate } from "../../lib/format";
+import { formatTicketCode } from "../../lib/ticket";
 
 const PAGE_SIZE = 10;
 
@@ -100,9 +101,10 @@ export default function AllTickets() {
               <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="border-b border-surface-variant bg-surface-container-low text-on-surface-variant text-[11px] font-semibold uppercase tracking-wider">
-                    <th className="py-3 px-4">Title</th>
-                    <th className="py-3 px-4">Requester</th>
+                    <th className="py-3 px-4">Ticket Details</th>
+                    <th className="py-3 px-4">Creator</th>
                     <th className="py-3 px-4">Status</th>
+                    <th className="py-3 px-4">Priority</th>
                     <th className="py-3 px-4">Assigned To</th>
                     <th className="py-3 px-4">Created</th>
                     <th className="py-3 px-4 text-right">Actions</th>
@@ -113,9 +115,12 @@ export default function AllTickets() {
                     <tr key={ticket.id} className="hover:bg-surface-bright transition-colors">
                       <td className="py-3 px-4">
                         <div className="flex flex-col">
-                          <span className="text-xs font-semibold text-on-surface-variant">
-                            #{ticket.id}
-                          </span>
+                          <Link
+                            to={`/admin/tickets/${ticket.id}`}
+                            className="text-xs font-semibold text-primary hover:underline w-fit"
+                          >
+                            {formatTicketCode(ticket.id)}
+                          </Link>
                           <span className="line-clamp-1">{ticket.title}</span>
                         </div>
                       </td>
@@ -124,6 +129,9 @@ export default function AllTickets() {
                       </td>
                       <td className="py-3 px-4">
                         <StatusBadge status={ticket.status} />
+                      </td>
+                      <td className="py-3 px-4">
+                        <PriorityBadge priority={ticket.priority} />
                       </td>
                       <td className="py-3 px-4 text-on-surface-variant">
                         {ticket.assignee?.username ?? "Unassigned"}

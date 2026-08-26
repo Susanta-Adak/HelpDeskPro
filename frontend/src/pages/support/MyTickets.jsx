@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SupportLayout from "../../components/SupportLayout";
-import StatusBadge from "../../components/Badge";
+import StatusBadge, { PriorityBadge } from "../../components/Badge";
 import StatCard from "../../components/StatCard";
 import Icon from "../../components/Icon";
 import Pagination from "../../components/Pagination";
@@ -9,6 +9,7 @@ import { LoadingState, EmptyState, ErrorState } from "../../components/States";
 import { listMyTickets } from "../../api/ticketsApi";
 import { extractErrorMessage } from "../../api/client";
 import { formatDate, formatRelative } from "../../lib/format";
+import { formatTicketCode } from "../../lib/ticket";
 
 const PAGE_SIZE = 5;
 
@@ -59,7 +60,7 @@ export default function MyTickets() {
         <div>
           <h2 className="text-2xl font-semibold text-on-surface">My Tickets</h2>
           <p className="text-sm text-on-surface-variant mt-1">
-            Manage and track your support requests.
+            Tickets you've created or that are assigned to you.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -134,6 +135,7 @@ export default function MyTickets() {
                   <tr className="bg-surface-container-low border-b border-surface-variant text-on-surface-variant text-[11px] font-semibold uppercase tracking-wider">
                     <th className="p-4 min-w-[280px]">Ticket Details</th>
                     <th className="p-4">Status</th>
+                    <th className="p-4 hidden sm:table-cell">Priority</th>
                     <th className="p-4 hidden md:table-cell">Created</th>
                     <th className="p-4">Last Updated</th>
                     <th className="p-4 w-10" />
@@ -148,14 +150,21 @@ export default function MyTickets() {
                     >
                       <td className="p-4">
                         <div className="flex flex-col">
-                          <span className="font-semibold text-primary group-hover:underline">
-                            #{ticket.id}
-                          </span>
+                          <Link
+                            to={`/tickets/${ticket.id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="font-semibold text-primary hover:underline w-fit"
+                          >
+                            {formatTicketCode(ticket.id)}
+                          </Link>
                           <span className="mt-1 line-clamp-1">{ticket.title}</span>
                         </div>
                       </td>
                       <td className="p-4">
                         <StatusBadge status={ticket.status} />
+                      </td>
+                      <td className="p-4 hidden sm:table-cell">
+                        <PriorityBadge priority={ticket.priority} />
                       </td>
                       <td className="p-4 hidden md:table-cell text-on-surface-variant">
                         {formatDate(ticket.created_at)}

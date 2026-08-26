@@ -15,13 +15,22 @@ export default function AdminLayout({ children }) {
   return (
     <div className="min-h-screen flex bg-background">
       <nav className="hidden md:flex flex-col w-[240px] h-screen fixed left-0 top-0 bg-surface-container-lowest border-r border-surface-variant py-6 z-20">
-        <Link to="/admin" className="px-4 mb-8 flex items-center gap-3">
+        <Link to="/admin" className="px-4 mb-6 flex items-center gap-3">
           <img src={logo} alt="HelpDeskPro" className="h-8 w-8 object-contain" />
           <div>
             <h1 className="text-base font-bold text-primary leading-tight">HelpDeskPro</h1>
             <p className="text-[11px] text-on-surface-variant">Admin Console</p>
           </div>
         </Link>
+        <div className="px-3 mb-6">
+          <Link
+            to="/admin/tickets/new"
+            className="w-full h-11 rounded-lg bg-primary text-on-primary text-sm font-medium flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
+          >
+            <Icon name="add" size="18px" />
+            Create Ticket
+          </Link>
+        </div>
         <div className="flex-1 px-3 space-y-1">
           {NAV_ITEMS.map((item) => {
             const active = item.exact

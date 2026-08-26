@@ -6,6 +6,7 @@ from app.db.session import get_db
 from app.models.ticket import Ticket, TicketStatus
 from app.models.user import User, UserRole
 from app.schemas.ticket import (
+    AgentOverview,
     DashboardStats,
     PaginatedTickets,
     TicketAssign,
@@ -70,7 +71,7 @@ def assign_ticket(
     current_user: User = Depends(require_admin),
 ) -> Ticket:
     ticket = ticket_service.get_ticket_or_404(db, ticket_id)
-    return ticket_service.assign_ticket(db, ticket, payload.assignee_id, current_user)
+    return ticket_service.reassign_ticket(db, ticket, payload.assignee_id, current_user)
 
 
 @router.delete("/tickets/{ticket_id}", status_code=204)
@@ -87,3 +88,8 @@ def dashboard_stats(db: Session = Depends(get_db)) -> DashboardStats:
 @router.get("/support-users", response_model=list[UserOut])
 def list_support_users(db: Session = Depends(get_db)) -> list[User]:
     return db.query(User).filter(User.role == UserRole.SUPPORT).order_by(User.username).all()
+
+
+@router.get("/team-overview", response_model=list[AgentOverview])
+def team_overview(db: Session = Depends(get_db)) -> list[dict]:
+    return ticket_service.get_team_overview(db)

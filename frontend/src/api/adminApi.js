@@ -38,3 +38,8 @@ export async function listSupportUsers() {
   const { data } = await apiClient.get("/admin/support-users");
   return data;
 }
+
+export async function getTeamOverview() {
+  const { data } = await apiClient.get("/admin/team-overview");
+  return data;
+}

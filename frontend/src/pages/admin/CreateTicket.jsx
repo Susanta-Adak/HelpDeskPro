@@ -1,5 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
-import SupportLayout from "../../components/SupportLayout";
+import AdminLayout from "../../components/AdminLayout";
 import TicketForm from "../../components/TicketForm";
 import { createTicket } from "../../api/ticketsApi";
 import { extractErrorMessage } from "../../api/client";
@@ -10,28 +10,28 @@ export default function CreateTicket() {
   async function handleSubmit(formData) {
     try {
       const ticket = await createTicket(formData);
-      navigate(`/tickets/${ticket.id}`, { replace: true });
+      navigate(`/admin/tickets/${ticket.id}`, { replace: true });
     } catch (err) {
       throw new Error(extractErrorMessage(err, "Could not create the ticket. Please try again."));
     }
   }
 
   return (
-    <SupportLayout>
+    <AdminLayout>
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
-          <Link to="/tickets" className="text-sm text-primary hover:underline">
-            ← Back to My Tickets
+          <Link to="/admin/tickets" className="text-sm text-primary hover:underline">
+            ← Back to All Tickets
           </Link>
         </div>
         <div className="bg-surface-container-lowest rounded-xl border border-surface-variant card-shadow p-6 md:p-8">
           <h2 className="text-xl font-semibold text-on-surface">Create New Ticket</h2>
           <p className="text-sm text-on-surface-variant mt-1 mb-6">
-            Describe your issue and our support team will get back to you.
+            Create a ticket on behalf of a customer or for internal tracking.
           </p>
-          <TicketForm onSubmit={handleSubmit} cancelTo="/tickets" />
+          <TicketForm onSubmit={handleSubmit} cancelTo="/admin/tickets" />
         </div>
       </div>
-    </SupportLayout>
+    </AdminLayout>
   );
 }
