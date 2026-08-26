@@ -11,5 +11,9 @@ class Settings(BaseSettings):
     jwt_access_token_expire_minutes: int = 60 * 24
     cors_origins: list[str] = ["http://localhost:5173", "http://localhost:3000"]
 
+    # Bootstrap credentials for `python -m app.db.seed` — set via .env, never hardcoded.
+    seed_admin_username: str = "admin"
+    seed_admin_password: str | None = None
+
 
 settings = Settings()

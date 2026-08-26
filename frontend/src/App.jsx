@@ -8,6 +8,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import AllTickets from "./pages/admin/AllTickets";
 import AdminCreateTicket from "./pages/admin/CreateTicket";
 import AdminTicketDetails from "./pages/admin/TicketDetails";
+import AdminUsers from "./pages/admin/Users";
 
 function Home() {
   const { isAuthenticated, user } = useAuth();
@@ -80,6 +81,14 @@ export default function App() {
             element={
               <RequireAdmin>
                 <AdminCreateTicket />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <RequireAdmin>
+                <AdminUsers />
               </RequireAdmin>
             }
           />

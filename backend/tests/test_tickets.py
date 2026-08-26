@@ -165,6 +165,51 @@ def test_creator_who_is_not_assignee_cannot_change_status(
     assert resp.status_code == 403
 
 
+def test_admin_can_reopen_closed_ticket(
+    client, support_headers, other_support_headers, admin_headers, other_support_user
+):
+    ticket = create_ticket(client, support_headers).json()
+    client.patch(
+        f"/admin/tickets/{ticket['id']}/assign",
+        json={"assignee_id": other_support_user.id},
+        headers=admin_headers,
+    )
+    client.patch(
+        f"/tickets/{ticket['id']}/status", json={"status": "in_progress"}, headers=other_support_headers
+    )
+    client.patch(
+        f"/tickets/{ticket['id']}/status", json={"status": "closed"}, headers=other_support_headers
+    )
+
+    resp = client.patch(
+        f"/admin/tickets/{ticket['id']}/status", json={"status": "open"}, headers=admin_headers
+    )
+    assert resp.status_code == 200
+    assert resp.json()["status"] == "open"
+
+
+def test_assignee_cannot_reopen_closed_ticket(
+    client, support_headers, other_support_headers, admin_headers, other_support_user
+):
+    ticket = create_ticket(client, support_headers).json()
+    client.patch(
+        f"/admin/tickets/{ticket['id']}/assign",
+        json={"assignee_id": other_support_user.id},
+        headers=admin_headers,
+    )
+    client.patch(
+        f"/tickets/{ticket['id']}/status", json={"status": "in_progress"}, headers=other_support_headers
+    )
+    client.patch(
+        f"/tickets/{ticket['id']}/status", json={"status": "closed"}, headers=other_support_headers
+    )
+
+    resp = client.patch(
+        f"/tickets/{ticket['id']}/status", json={"status": "open"}, headers=other_support_headers
+    )
+    assert resp.status_code == 403
+
+
 def test_assignee_can_reassign_ticket(
     client, support_headers, other_support_headers, admin_headers, other_support_user, support_user
 ):

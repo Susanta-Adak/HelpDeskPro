@@ -32,7 +32,12 @@ def list_assignable_users(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> list[User]:
-    return db.query(User).filter(User.role == UserRole.SUPPORT).order_by(User.username).all()
+    return (
+        db.query(User)
+        .filter(User.role == UserRole.SUPPORT, User.is_active.is_(True))
+        .order_by(User.username)
+        .all()
+    )
 
 
 @router.post("", response_model=TicketOut, status_code=status.HTTP_201_CREATED)
@@ -119,7 +124,7 @@ def change_status(
     current_user: User = Depends(get_current_user),
 ) -> Ticket:
     ticket = ticket_service.get_ticket_or_404(db, ticket_id)
-    ticket_service.assert_can_change_status(ticket, current_user)
+    ticket_service.assert_can_change_status(ticket, current_user, payload.status)
     return ticket_service.change_status(db, ticket, payload.status, current_user)
 
 

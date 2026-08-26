@@ -8,11 +8,12 @@ from app.models.comment import Comment
 from app.models.ticket import Ticket, TicketCategory, TicketPriority, TicketStatus
 from app.models.user import User, UserRole
 
-# Only forward transitions are allowed, one step at a time.
+# Forward transitions move one step at a time; the only backward transition is
+# reopening a closed ticket, which is restricted to admins (see assert_can_change_status).
 ALLOWED_TRANSITIONS: dict[TicketStatus, set[TicketStatus]] = {
     TicketStatus.OPEN: {TicketStatus.IN_PROGRESS},
     TicketStatus.IN_PROGRESS: {TicketStatus.CLOSED},
-    TicketStatus.CLOSED: set(),
+    TicketStatus.CLOSED: {TicketStatus.OPEN},
 }
 
 ACTIVE_STATUSES = {TicketStatus.OPEN, TicketStatus.IN_PROGRESS}
@@ -41,7 +42,15 @@ def assert_creator(ticket: Ticket, user: User) -> None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only the creator can do this")
 
 
-def assert_can_change_status(ticket: Ticket, user: User) -> None:
+def assert_can_change_status(ticket: Ticket, user: User, new_status: TicketStatus) -> None:
+    is_reopen = ticket.status == TicketStatus.CLOSED and new_status == TicketStatus.OPEN
+    if is_reopen:
+        if user.role != UserRole.ADMIN:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Only an admin can reopen a closed ticket",
+            )
+        return
     if user.role != UserRole.ADMIN and ticket.assignee_id != user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -142,10 +151,10 @@ def change_status(db: Session, ticket: Ticket, new_status: TicketStatus, actor: 
 
 def reassign_ticket(db: Session, ticket: Ticket, assignee_id: int, actor: User) -> Ticket:
     assignee = db.query(User).filter(User.id == assignee_id).first()
-    if assignee is None or assignee.role != UserRole.SUPPORT:
+    if assignee is None or assignee.role != UserRole.SUPPORT or not assignee.is_active:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="assignee_id must reference an existing support user",
+            detail="assignee_id must reference an existing, active support user",
         )
     ticket.assignee_id = assignee.id
     ticket.updated_by_id = actor.id

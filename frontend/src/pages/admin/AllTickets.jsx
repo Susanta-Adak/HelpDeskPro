@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import AdminLayout from "../../components/AdminLayout";
 import StatusBadge, { PriorityBadge } from "../../components/Badge";
 import Icon from "../../components/Icon";
+import Avatar from "../../components/Avatar";
 import Pagination from "../../components/Pagination";
 import { LoadingState, ErrorState, EmptyState } from "../../components/States";
 import { listAllTickets } from "../../api/adminApi";
@@ -125,7 +126,10 @@ export default function AllTickets() {
                         </div>
                       </td>
                       <td className="py-3 px-4 text-on-surface-variant">
-                        {ticket.creator?.username}
+                        <div className="flex items-center gap-2">
+                          <Avatar name={ticket.creator?.username} size="xs" />
+                          {ticket.creator?.username}
+                        </div>
                       </td>
                       <td className="py-3 px-4">
                         <StatusBadge status={ticket.status} />
@@ -134,7 +138,14 @@ export default function AllTickets() {
                         <PriorityBadge priority={ticket.priority} />
                       </td>
                       <td className="py-3 px-4 text-on-surface-variant">
-                        {ticket.assignee?.username ?? "Unassigned"}
+                        {ticket.assignee ? (
+                          <div className="flex items-center gap-2">
+                            <Avatar name={ticket.assignee.username} size="xs" />
+                            {ticket.assignee.username}
+                          </div>
+                        ) : (
+                          "Unassigned"
+                        )}
                       </td>
                       <td className="py-3 px-4 text-on-surface-variant">
                         {formatDate(ticket.created_at)}

@@ -2,128 +2,27 @@
 
 A small role-based helpdesk app with two user types:
 
-- **Support User** — creates and manages their own tickets
-- **Admin** — manages all tickets, assignment, and statistics
+- **Support User** — creates, tracks, and comments on tickets; can also be assigned tickets by an admin or another agent, and can drive an assigned ticket through Open → In Progress → Closed
+- **Admin** — manages all tickets, assignment, dashboard analytics, and user accounts
 
-Built as a technical interview / portfolio project. See [`CLAUDE.md`](./CLAUDE.md) for the full assignment spec and conventions this codebase follows.
+Built as a technical interview / portfolio project. See [`CLAUDE.md`](./CLAUDE.md) for the full assignment spec and engineering conventions this codebase follows.
 
 ## Tech Stack
 
-| Layer    | Technology                     |
-|----------|---------------------------------|
-| Frontend | React.js (Vite, React Router, Tailwind CSS v4) |
-| Backend  | FastAPI (Python)                |
-| Database | SQLite                          |
-| Auth     | JWT (username/password login)   |
-| API      | RESTful, JSON                   |
+| Layer    | Technology                                     |
+|----------|-------------------------------------------------|
+| Frontend | React (Vite, React Router, Tailwind CSS v4)     |
+| Backend  | FastAPI (Python)                                |
+| Database | SQLite                                          |
+| Auth     | JWT (username/password login)                   |
 
-## Status
+## Key Features
 
-- ✅ **Backend** — implemented, tested (24 passing pytest cases), manually smoke-tested end-to-end
-- ✅ **Frontend** — implemented (support + admin flows), manually smoke-tested end-to-end against the backend
-
-## Project Structure
-
-```
-backend/
-  app/
-    main.py          # FastAPI app, CORS, router wiring, startup (create tables)
-    core/
-      config.py       # env-driven settings (DB URL, JWT secret/alg/expiry, CORS)
-      security.py      # password hashing (bcrypt), JWT create/decode
-      deps.py           # get_current_user, require_admin FastAPI dependencies
-    models/            # SQLAlchemy ORM models (User, Ticket)
-    schemas/            # Pydantic request/response schemas
-    api/
-      auth.py            # POST /auth/login
-      tickets.py          # support-user ticket routes (own tickets only)
-      admin.py             # admin-only routes (all tickets, assign, stats)
-    services/
-      ticket_service.py     # ownership checks, status-transition rules, stats
-    db/
-      base.py                # SQLAlchemy declarative base
-      session.py              # engine + session factory + get_db dependency
-      seed.py                  # demo admin/support users + sample tickets
-  tests/                        # pytest + httpx test suite
-  requirements.txt
-
-frontend/
-  src/
-    api/           # axios instance + one service module per resource (auth, tickets, admin)
-    context/         # AuthContext + RequireAuth/RequireAdmin/RequireSupport route guards
-    components/        # Badge, Modal, Pagination, StatCard, states, Support/Admin layout shells
-    pages/
-      Login.jsx
-      support/            # MyTickets, CreateTicket, TicketDetails
-      admin/               # Dashboard, AllTickets, TicketDetails
-    lib/                     # date/format helpers
-    App.jsx                   # routes
-  index.html
-  package.json
-
-CLAUDE.md   # assignment spec & engineering conventions
-README.md
-```
-
-## Backend Architecture
-
-**Layering:** routers (`api/`) are kept thin — they only validate input and shape responses. All business rules (ownership, status transitions, assignment validity, stats aggregation) live in `services/ticket_service.py`, so the same rules apply consistently whether called from a support-user or admin route, and are unit-testable in isolation.
-
-**Auth:** `POST /auth/login` verifies username/password (bcrypt) and issues a JWT (`sub` = username, `role` = user role, expiry from config). Every protected route depends on `get_current_user` (decodes + validates the JWT, loads the user) or `require_admin` (additionally checks `role == admin`, raising `403` otherwise). Role checks live in one place — never repeated per-route.
-
-**Enforcement rules (server-side, not just UI):**
-- **Ownership** — a support user can only `GET`/`PUT`/`DELETE` tickets where `creator_id == current_user.id`; anything else is `403`.
-- **Status-gated edit/delete** — a support user may update or delete their ticket only while `status == open` (`400` otherwise).
-- **Status transitions** — admin-only, one step forward at a time: `open → in_progress → closed`. Skipping or reversing a transition returns `400`.
-- **Assignment** — admin-only; `assignee_id` must reference an existing user with role `support`, or `400`.
-- **Role boundary** — every `/admin/*` route requires `role == admin`; a support user hitting it gets `403`.
-
-### API Overview
-
-| Method | Endpoint                          | Who            | Purpose                                   |
-|--------|------------------------------------|----------------|--------------------------------------------|
-| POST   | `/auth/login`                       | anyone         | Login, returns JWT + user                  |
-| POST   | `/tickets`                           | authenticated  | Create a ticket                            |
-| GET    | `/tickets`                            | authenticated  | List **my** tickets                        |
-| GET    | `/tickets/{id}`                        | owner only     | Ticket detail                              |
-| PUT    | `/tickets/{id}`                         | owner, open only | Update ticket                            |
-| DELETE | `/tickets/{id}`                          | owner, open only | Delete/cancel ticket                     |
-| GET    | `/admin/tickets`                          | admin          | List all tickets, `search`, `status`, pagination |
-| GET    | `/admin/tickets/{id}`                      | admin          | Ticket detail (any ticket)                 |
-| PATCH  | `/admin/tickets/{id}/status`                | admin          | Change status (validated transition)       |
-| PATCH  | `/admin/tickets/{id}/assign`                 | admin          | Assign to a support user                   |
-| DELETE | `/admin/tickets/{id}`                         | admin          | Delete a ticket                            |
-| GET    | `/admin/stats`                                 | admin          | Dashboard counts (total/open/in-progress/closed, by assignee) |
-| GET    | `/admin/support-users`                          | admin          | List support users (for assignment dropdown) |
-
-## Entity Relationship Diagram
-
-```mermaid
-erDiagram
-    USER ||--o{ TICKET : "creates (creator_id)"
-    USER ||--o{ TICKET : "is assigned (assignee_id)"
-    USER ||--o{ TICKET : "last updated (updated_by_id)"
-
-    USER {
-        int id PK
-        string username UK
-        string hashed_password
-        enum role "support | admin"
-    }
-
-    TICKET {
-        int id PK
-        string title
-        text description
-        enum status "open | in_progress | closed"
-        int creator_id FK
-        int assignee_id FK "nullable"
-        int updated_by_id FK "nullable"
-        datetime created_at
-        datetime updated_at
-        datetime status_changed_at "nullable"
-    }
-```
+- Role-based access enforced server-side (ownership, status transitions, admin-only routes)
+- Tickets have priority, category, an optional file attachment (PNG/JPG/PDF, 10MB), and a comment thread
+- A support user sees tickets they created **or** are assigned to; the creator can always edit, but only delete while Open; the current assignee (or an admin) can change status, with reopening a closed ticket restricted to admins
+- Admin dashboard: ticket counts, a status donut chart, and per-agent workload
+- Admin-managed user provisioning — no hardcoded passwords, no public self-registration; admins can also activate/deactivate any account (deactivated users are blocked at login and mid-session, and disappear from assignment dropdowns) (see below)
 
 ## Getting Started (Backend)
 
@@ -133,50 +32,36 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-# create demo data: admin/admin123, alice/alice123, bob/bob123 (support)
-python -m app.db.seed
+# copy the template and set your own bootstrap password
+cp .env.example .env
+# edit .env: set SEED_ADMIN_PASSWORD
 
-# run the API
+python -m app.db.seed   # creates just the admin account; fails if the env var above isn't set
 uvicorn app.main:app --reload
 ```
 
-API docs available at `http://127.0.0.1:8000/docs` once running.
+API docs: `http://127.0.0.1:8000/docs`. Run tests with `pytest -q`.
 
-Run the test suite:
+### Managing users
 
-```bash
-cd backend
-pytest -q
-```
+The seed script only bootstraps the one admin account — no demo support
+users or sample tickets. Log in as that admin and use the **Users** page
+(or `POST /admin/users`) to create support/admin accounts and start
+creating tickets. From the same page, admins can deactivate/reactivate any
+account; a deactivated user is rejected at login and on their next request
+even mid-session, and is excluded from assignment dropdowns.
 
 ## Getting Started (Frontend)
-
-The backend must be running first (see above) so the frontend has an API to call.
 
 ```bash
 cd frontend
 npm install
-
-# .env already points VITE_API_BASE_URL at http://127.0.0.1:8000 — edit it if your backend runs elsewhere
-npm run dev
+npm run dev   # http://localhost:5173, expects the backend at :8000 (see .env)
 ```
-
-The app runs at `http://localhost:5173`. Log in with one of the seeded accounts:
-
-- Admin: `admin / admin123`
-- Support: `alice / alice123` or `bob / bob123`
-
-### Frontend Architecture
-
-- **Routing:** React Router, with `RequireAuth` / `RequireSupport` / `RequireAdmin` guards in `context/AuthContext.jsx` redirecting unauthenticated or wrong-role users (e.g. a support user hitting `/admin` is bounced to `/tickets`, mirroring the backend's `403` boundary).
-- **API layer:** `src/api/client.js` holds a single axios instance that attaches the JWT from `localStorage` to every request and clears auth on a `401`. `authApi.js`, `ticketsApi.js`, and `adminApi.js` each wrap one backend resource — components never call axios directly.
-- **Support flow:** `MyTickets` (list), `CreateTicket` (client-side validation matching the backend's title/description length rules), `TicketDetails` (editable only while `status === open`, matching the backend's edit/delete gate — a closed/in-progress ticket renders read-only).
-- **Admin flow:** `Dashboard` (stats + tickets-by-assignee), `AllTickets` (debounced search, status filter, pagination), `TicketDetails` (status stepper that only allows the single forward transition the backend permits, assignment dropdown, delete with a confirmation modal).
-- **Design system:** built to match a Stitch-generated design (Tailwind v4 tokens for color/type/radius in `src/index.css`), reused across support and admin surfaces as shared `Badge`, `StatCard`, `Modal`, `Pagination`, and layout components.
 
 ## Assumptions & Limitations
 
-- No user self-registration endpoint — accounts are provisioned via the seed script (matches the assignment's username/password-only auth scope; a registration flow was out of scope).
-- JWTs are long-lived (24h by default) with no refresh-token flow yet.
-- SQLite is used intentionally so the project runs with zero external setup.
-- The frontend stores the JWT in `localStorage` (not an httpOnly cookie) for simplicity; acceptable for this project's scope but not a production-grade token storage strategy.
+- No public self-registration — this is an internal tool, so accounts are admin-provisioned rather than open sign-up.
+- JWTs are long-lived (24h by default) with no refresh-token flow.
+- SQLite is used intentionally so the project runs with zero external setup; there's no migration tool, so schema changes require dropping and reseeding the local `.db` file.
+- The frontend stores the JWT in `localStorage` (not an httpOnly cookie) for simplicity — fine for this project's scope, not production-grade token storage.
