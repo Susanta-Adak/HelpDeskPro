@@ -5,7 +5,6 @@ A small role-based helpdesk app with two user types:
 - **Support User** — creates, tracks, and comments on tickets; can also be assigned tickets by an admin or another agent, and can drive an assigned ticket through Open → In Progress → Closed
 - **Admin** — manages all tickets, assignment, dashboard analytics, and user accounts
 
-Built as a technical interview / portfolio project. See [`CLAUDE.md`](./CLAUDE.md) for the full assignment spec and engineering conventions this codebase follows.
 
 ## Tech Stack
 
